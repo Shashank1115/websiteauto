@@ -1,0 +1,68 @@
+/* App.css */
+.app-container {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  background-color: #e07a5f;
+  width: 200px;
+  padding: 20px;
+  color: white;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebar-header img {
+  width: 50px;
+  height: 50px;
+  margin-right: 10px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.sidebar li.active {
+  background-color: #cc664a;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.header input[type="search"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.student-details {
+  margin-bottom: 20px;
+}
+
+.student-details div {
+  margin-bottom: 5px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}

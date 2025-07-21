@@ -1,0 +1,23 @@
+{
+  "name": "ai-deployment-system",
+  "version": "1.0.0",
+  "description": "An orchestrator to generate and deploy websites from a prompt.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "ai",
+    "automation",
+    "deployment",
+    "vercel",
+    "gemini"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@google/generative-ai": "^0.14.1",
+    "express": "^4.18.2",
+    "archiver": "^7.0.1"
+  }
+}

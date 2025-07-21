@@ -1,0 +1,99 @@
+/* App.css */
+.App {
+  display: flex;
+  height: 100vh;
+}
+
+.sidebar {
+  width: 200px;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.sidebar li i {
+  margin-right: 10px;
+}
+
+.message-count {
+  background-color: red;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 50%;
+  margin-left: 5px;
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+}
+
+.story-container {
+  display: flex;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.story-item {
+  margin-right: 10px;
+}
+
+.story-item img {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+.post-container {
+  margin-bottom: 20px;
+}
+
+.post-container img {
+  width: 100%;
+  height: auto;
+}
+
+.suggestions {
+    margin-top: 20px;
+}
+
+.suggestion-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.suggestion-item img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.messages-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}

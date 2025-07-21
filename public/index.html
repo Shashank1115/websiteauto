@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Website Creator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <div class="card">
+            <div id="setup-step">
+                <h1>AI Website Creator</h1>
+                <p class="subtitle">Enter a prompt, choose a tech stack, and provide your API keys to generate a website preview.</p>
+                
+                <!-- NEW: UI Image Upload -->
+                <div class="form-group">
+                    <label for="ui-upload">Upload a UI Screenshot (Optional)</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="ui-upload" accept="image/png, image/jpeg">
+                        <label for="ui-upload" class="file-upload-label">Choose a file...</label>
+                    </div>
+                    <div id="image-preview-container" class="hidden">
+                        <img id="image-preview" src="#" alt="Image Preview"/>
+                        <button id="remove-image-btn">&times;</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="prompt">Website Prompt</label>
+                    <input type="text" id="prompt" placeholder="e.g., A modern portfolio for a photographer">
+                </div>
+
+                <div class="form-group">
+                    <label for="tech-stack">Choose a Technology Stack</label>
+                    <select id="tech-stack">
+                        <option value="react" selected>React</option>
+                        <option value="vue">Vue.js</option>
+                        <option value="angular">Angular</option>
+                        <option value="html">HTML/CSS/JS</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="geminiKey">Gemini API Key</label>
+                    <input type="password" id="geminiKey" placeholder="Enter your Google AI Studio key">
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" class="help-link">How to get a key?</a>
+                </div>
+
+                <div class="form-group">
+                    <label for="vercelToken">Vercel Access Token</label>
+                    <input type="password" id="vercelToken" placeholder="Enter your Vercel token">
+                    <a href="https://vercel.com/account/tokens" target="_blank" class="help-link">How to get a token?</a>
+                </div>
+                
+                <button id="generate-preview-btn">Generate Preview</button>
+            </div>
+
+            <div id="preview-step" class="hidden">
+                <h2>Preview Ready!</h2>
+                <p class="subtitle">Your temporary preview site has been generated. Open it in a new tab to review it.</p>
+                <div class="preview-link-container">
+                    <a id="preview-link" href="#" target="_blank" class="preview-link">Open Preview in New Tab</a>
+                </div>
+                <p class="subtitle" style="margin-top: 1.5rem;">If you like what you see, come back to this page and click "Deploy to Production".</p>
+                <div class="button-group">
+                    <button id="confirm-deploy-btn" class="btn-primary">Deploy to Production</button>
+                    <button id="cancel-btn" class="btn-secondary">Cancel</button>
+                </div>
+            </div>
+
+            <div id="result-step" class="hidden">
+                <h2>Deployment Successful!</h2>
+                <p>Your new website is live at:</p>
+                <a id="live-url" href="#" target="_blank"></a>
+                <div class="button-group" style="margin-top: 1.5rem;">
+                    <button id="download-btn" class="btn-primary">Download Code (.zip)</button>
+                    <button id="start-over-btn" class="btn-secondary">Start Over</button>
+                </div>
+            </div>
+
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p id="loading-text">Contacting AI and generating preview...</p>
+            </div>
+
+            <div id="error-message" class="hidden"></div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
