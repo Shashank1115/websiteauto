@@ -38,18 +38,52 @@ function getTechStackDetails(techStack, prompt, hasImage) {
 
     switch (techStack) {
         case 'angular':
-            fullPrompt = `
-              You are an expert web developer specializing in Angular and Tailwind CSS.
-              Your task is to generate a complete, production-ready, MULTI-PAGE Angular application.
-              **User's Request:** "${prompt}"
-              ${imageInstruction}
-              ${contentInstruction}
-              **Technical Requirements:**
-              1.  **Tech Stack:** Use Angular, TypeScript, and Tailwind CSS.
-              2.  **Routing:** Use '@angular/router'. The main 'app.routes.ts' should define the routes, and 'app.component.html' should contain the <router-outlet>.
-              3.  **File Structure:** Generate separate component files for each page inside 'src/app/pages/'. Also generate 'src/app/app.component.ts', 'src/app/app.component.html', 'src/app/app.routes.ts', 'src/main.ts', 'src/index.html', and 'tailwind.config.js'.
-              4.  **Output Format:** Respond with a single, valid JSON object.
-              5.  **Images:** Use placeholder images from https://placehold.co.`;
+           fullPrompt = `
+You are a senior Angular developer with expertise in Angular 16+, TypeScript, and Tailwind CSS.
+
+Your task is to generate a fully working, production-ready, multi-page Angular application as described below.
+
+User Request: "${prompt}"
+
+${imageInstruction}
+${contentInstruction}
+
+Project Structure (Required):
+
+- package.json
+- angular.json
+- tsconfig.json
+- tailwind.config.js
+- src/index.html (root index)
+- src/main.ts (bootstraps the app)
+- src/styles.css (with Tailwind CSS directives)
+- src/app/app.component.ts, src/app/app.component.html, src/app/app.component.css
+- src/app/app.routes.ts
+- src/app/pages/
+    - home.component.ts/html/css
+    - speakers.component.ts/html/css
+    - schedule.component.ts/html/css
+- src/app/shared/navbar/
+    - navbar.component.ts/html/css
+
+Routing:
+- Use "@angular/router" for client-side navigation.
+- Define routes in "app.routes.ts" to map:
+    - '' → HomeComponent
+    - 'speakers' → SpeakersComponent
+    - 'schedule' → ScheduleComponent
+- Make sure <router-outlet> is used in "app.component.html" to render pages.
+
+Images:
+- Use placeholder image URLs such as: https://placehold.co/300x200
+
+Output Format:
+- Return a single, valid JSON object, where:
+    - Each key is a file path (e.g., "src/app/app.component.ts")
+    - Each value is the **full** file content (not truncated or summarized).
+- Do NOT include Markdown, code blocks, or explanations. Only output raw JSON.
+`;
+
             dependencies = { 
                 "@angular/common": "^16.0.0", "@angular/compiler": "^16.0.0", "@angular/core": "^16.0.0", 
                 "@angular/forms": "^16.0.0", "@angular/platform-browser": "^16.0.0", "@angular/platform-browser-dynamic": "^16.0.0", 
@@ -60,34 +94,95 @@ function getTechStackDetails(techStack, prompt, hasImage) {
             scripts = { "start": "ng serve", "build": "ng build" };
             break;
         case 'vue':
-            fullPrompt = `
-              You are an expert web developer specializing in Vue.js and Tailwind CSS.
-              Your task is to generate a complete, production-ready, MULTI-PAGE Vue application.
-              **User's Request:** "${prompt}"
-              ${imageInstruction}
-              ${contentInstruction}
-              **Technical Requirements:**
-              1.  **Tech Stack:** Use Vue 3 and Tailwind CSS.
-              2.  **Routing:** Use 'vue-router'. The main 'src/router/index.js' should define the routes.
-              3.  **File Structure:** Generate separate component files for each page inside 'src/views/'. Generate 'src/App.vue' (with <router-view>), 'src/router/index.js', 'src/main.js', 'index.html', and 'tailwind.config.js'.
-              4.  **Output Format:** Respond with a single, valid JSON object.
-              5.  **Images:** Use placeholder images from https://placehold.co.`;
+           fullPrompt = `
+You are an expert Vue 3 developer with strong skills in Tailwind CSS and SPAs.
+
+Your task is to generate a complete, deployable, multi-page Vue 3 application with Tailwind CSS based on the following details.
+
+User Prompt: "${prompt}"
+
+${imageInstruction}
+${contentInstruction}
+
+Required Project Structure:
+
+- package.json
+- index.html (with app mount point)
+- tailwind.config.js
+- src/main.js (entry file for Vue app)
+- src/App.vue (root component, must have layout and <router-view>)
+- src/router/index.js (sets up Vue Router)
+- src/components/Navbar.vue (navigation bar for all routes)
+- src/views/
+    - Home.vue (homepage content, includes hero, about, CTA)
+    - Speakers.vue (speaker grid/cards)
+    - Schedule.vue (event schedule/timeline)
+
+Routing:
+- Use "vue-router" v4. Declare routes in "src/router/index.js":
+    - "/" → Home
+    - "/speakers" → Speakers
+    - "/schedule" → Schedule
+- Show the Navbar on every page (imported into App.vue).
+
+Images:
+- For all components/cards/profiles, use placeholder images from: https://placehold.co/300x200
+
+Output Format:
+- Output a single valid JSON object where each key is a file path (e.g., "src/views/Home.vue"), and the value is the full file contents.
+- Do NOT include code blocks, Markdown, or explanations—only plain JSON.
+`;
+
             dependencies = { "vue": "^3.3.4", "vue-router": "^4.2.4", "tailwindcss": "^3.3.3" };
             scripts = { "serve": "vue-cli-service serve", "build": "vue-cli-service build" };
             break;
         default: // React with Tailwind CSS
-            fullPrompt = `
-              You are an expert full-stack web developer specializing in React and Tailwind CSS.
-              Your task is to generate a complete, production-ready, MULTI-PAGE React application.
-              **User's Request:** "${prompt}"
-              ${imageInstruction}
-              ${contentInstruction}
-              **Technical Requirements:**
-              1.  **Tech Stack:** Use React.js with Tailwind CSS for all styling.
-              2.  **Routing:** Use 'react-router-dom'. The main 'App.js' should set up the router.
-              3.  **File Structure:** Generate separate component files for each page inside 'src/pages/'. Generate 'src/App.js', 'public/index.html' (with Tailwind CDN script), 'src/index.js', and a basic 'src/index.css'.
-              4.  **Output Format:** Respond with a single, valid JSON object.
-              5.  **Images & SVGs:** Use placeholder images from https://placehold.co OR use inline SVG for icons.`;
+           fullPrompt = `
+You are an expert full-stack web developer specializing in React and Tailwind CSS.
+
+Your goal is to generate a complete, production-ready, multi-page React application based on the following user prompt:
+
+**Prompt**: "${prompt}"
+
+${imageInstruction}
+${contentInstruction}
+
+** Project Structure Requirements**
+
+Generate a fully working React project with the following file and folder structure:
+
+1. **Root Directory**:
+    - package.json
+    - public/index.html (must have a <div id="root"> and Tailwind CDN)
+    - tailwind.config.js
+
+2. **src/index.js**: Entry point that renders the <App /> component.
+
+3. **src/App.js**: Should include React Router and define all routes.
+
+4. **src/pages/**: Create separate React component files here for:
+    - Home.js — with hero section, about, and register CTA.
+    - Speakers.js — shows speaker cards with image, name, title, and bio.
+    - Schedule.js — shows a day’s timeline schedule.
+
+5. **src/components/**:
+    - Navbar.js — contains links to Home, Speakers, Schedule.
+
+6. **src/index.css**:
+    - Setup Tailwind base styles: \`@tailwind base;\n@tailwind components;\n@tailwind utilities;\`
+
+** Routing Requirements**
+Use \`react-router-dom v6+\`. In App.js, use <BrowserRouter>, <Routes>, and <Route> to define paths "/", "/speakers", and "/schedule", and render pages accordingly.
+
+** Output Format**
+Respond with a single valid JSON object with keys as file paths (e.g., "src/App.js") and values as file contents. Do not include explanations.
+
+** Images**
+Use placeholder images from https://placehold.co (e.g., https://placehold.co/300x200?text=Speaker).
+
+Make sure all files are syntactically correct and the app builds successfully using \`npm run build\`.
+`;
+
             dependencies = { 
                 "react": "^18.2.0", "react-dom": "^18.2.0", "react-scripts": "5.0.1",
                 "react-router-dom": "^6.23.1", "tailwindcss": "^3.3.3"
@@ -192,11 +287,11 @@ app.post('/generate-preview', async (req, res) => {
         };
         await fs.writeFile(path.join(projectPath, 'package.json'), JSON.stringify(packageJsonContent, null, 2));
 
-        // --- NEW: Safety check to ensure critical files exist for React ---
         if (techStack === 'react') {
             const requiredFiles = {
                 'public/index.html': `<!DOCTYPE html><html lang="en"><head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><script src="https://cdn.tailwindcss.com"></script><title>AI Generated React App</title></head><body><noscript>You need to enable JavaScript to run this app.</noscript><div id="root"></div></body></html>`,
-                'src/index.js': `import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);`
+                'src/index.js': `import React from 'react';\nimport ReactDOM from 'react-dom/client';\nimport './index.css';\nimport App from './App';\n\nconst root = ReactDOM.createRoot(document.getElementById('root'));\nroot.render(\n  <React.StrictMode>\n    <App />\n  </React.StrictMode>\n);`,
+                'src/index.css': `@tailwind base;\n@tailwind components;\n@tailwind utilities;`
             };
 
             for (const [filePath, content] of Object.entries(requiredFiles)) {
