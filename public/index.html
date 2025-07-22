@@ -9,11 +9,11 @@
 <body>
     <main class="container">
         <div class="card">
+            <!-- AI Generation Section -->
             <div id="setup-step">
                 <h1>AI Website Creator</h1>
-                <p class="subtitle">Enter a prompt, choose a tech stack, and provide your API keys to generate a website preview.</p>
+                <p class="subtitle">Generate a new website from a prompt or an image.</p>
                 
-                <!-- NEW: UI Image Upload -->
                 <div class="form-group">
                     <label for="ui-upload">Upload a UI Screenshot (Optional)</label>
                     <div class="file-upload-wrapper">
@@ -28,16 +28,15 @@
 
                 <div class="form-group">
                     <label for="prompt">Website Prompt</label>
-                    <input type="text" id="prompt" placeholder="e.g., A modern portfolio for a photographer">
+                    <input type="text" id="prompt" placeholder="e.g., A 3-page portfolio with Home, About, and Contact pages">
                 </div>
 
                 <div class="form-group">
                     <label for="tech-stack">Choose a Technology Stack</label>
                     <select id="tech-stack">
-                        <option value="react" selected>React</option>
-                        <option value="vue">Vue.js</option>
-                        <option value="angular">Angular</option>
-                        <option value="html">HTML/CSS/JS</option>
+                        <option value="react" selected>React + Tailwind CSS</option>
+                        <option value="vue">Vue + Tailwind CSS</option>
+                        <option value="angular">Angular + Tailwind CSS</option>
                     </select>
                 </div>
                 
@@ -55,7 +54,28 @@
                 
                 <button id="generate-preview-btn">Generate Preview</button>
             </div>
+            
+            <!-- NEW: Direct Deployment Section -->
+            <div class="divider">OR</div>
+            <div id="direct-deploy-step">
+                <h2>Deploy Existing Project</h2>
+                <p class="subtitle">Have a project folder already? Zip it and upload it here for direct deployment.</p>
+                <div class="form-group">
+                    <label for="project-zip-upload">Upload Project (.zip)</label>
+                    <div class="file-upload-wrapper">
+                        <input type="file" id="project-zip-upload" accept=".zip">
+                        <label for="project-zip-upload" class="file-upload-label" id="zip-upload-label">Choose a .zip file...</label>
+                    </div>
+                </div>
+                 <div class="form-group">
+                    <label for="vercelTokenDirect">Vercel Access Token</label>
+                    <input type="password" id="vercelTokenDirect" placeholder="Enter your Vercel token">
+                </div>
+                <button id="direct-deploy-btn">Deploy from Zip</button>
+            </div>
 
+
+            <!-- Other steps (preview, result, loading, error) -->
             <div id="preview-step" class="hidden">
                 <h2>Preview Ready!</h2>
                 <p class="subtitle">Your temporary preview site has been generated. Open it in a new tab to review it.</p>

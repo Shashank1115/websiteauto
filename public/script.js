@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
         geminiApiKey: '',
         vercelToken: '',
         techStack: 'react',
-        imageData: null, // --- NEW: To store the uploaded image data ---
+        imageData: null, 
     };
 
     // --- UI Elements ---
@@ -22,20 +22,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const cancelBtn = document.getElementById('cancel-btn');
     const startOverBtn = document.getElementById('start-over-btn');
     const downloadBtn = document.getElementById('download-btn');
-    const removeImageBtn = document.getElementById('remove-image-btn'); // --- NEW ---
+    const removeImageBtn = document.getElementById('remove-image-btn'); 
+    const directDeployBtn = document.getElementById('direct-deploy-btn'); 
 
     // --- Inputs ---
     const promptInput = document.getElementById('prompt');
     const geminiKeyInput = document.getElementById('geminiKey');
     const vercelTokenInput = document.getElementById('vercelToken');
     const techStackSelect = document.getElementById('tech-stack'); 
-    const uiUploadInput = document.getElementById('ui-upload'); // --- NEW ---
+    const uiUploadInput = document.getElementById('ui-upload'); 
+    const projectZipUploadInput = document.getElementById('project-zip-upload'); 
+    const vercelTokenDirectInput = document.getElementById('vercelTokenDirect'); 
 
     // --- Outputs ---
     const previewLink = document.getElementById('preview-link');
     const liveUrlLink = document.getElementById('live-url');
-    const imagePreviewContainer = document.getElementById('image-preview-container'); // --- NEW ---
-    const imagePreview = document.getElementById('image-preview'); // --- NEW ---
+    const imagePreviewContainer = document.getElementById('image-preview-container'); 
+    const imagePreview = document.getElementById('image-preview'); 
+    const zipUploadLabel = document.getElementById('zip-upload-label'); 
 
 
     // --- Event Listeners ---
@@ -44,15 +48,30 @@ document.addEventListener('DOMContentLoaded', () => {
     cancelBtn.addEventListener('click', handleCancel);
     startOverBtn.addEventListener('click', resetToInitialState);
     downloadBtn.addEventListener('click', handleDownload);
-    uiUploadInput.addEventListener('change', handleImageUpload); // --- NEW ---
-    removeImageBtn.addEventListener('click', handleRemoveImage); // --- NEW ---
+    uiUploadInput.addEventListener('change', handleImageUpload); 
+    removeImageBtn.addEventListener('click', handleRemoveImage); 
+    directDeployBtn.addEventListener('click', handleDirectDeploy); 
+    projectZipUploadInput.addEventListener('change', () => { 
+        if (projectZipUploadInput.files.length > 0) {
+            zipUploadLabel.textContent = projectZipUploadInput.files[0].name;
+        } else {
+            zipUploadLabel.textContent = 'Choose a .zip file...';
+        }
+    });
 
     // --- Functions ---
     function showScreen(screen) {
-        setupStep.classList.add('hidden');
-        previewStep.classList.add('hidden');
-        resultStep.classList.add('hidden');
-        loadingDiv.classList.add('hidden');
+        const allSteps = [setupStep, previewStep, resultStep, loadingDiv];
+        allSteps.forEach(step => step.classList.add('hidden'));
+        
+        if (screen === previewStep || screen === resultStep || screen === loadingDiv) {
+             document.getElementById('direct-deploy-step').classList.add('hidden');
+             document.querySelector('.divider').classList.add('hidden');
+        } else {
+            document.getElementById('direct-deploy-step').classList.remove('hidden');
+            document.querySelector('.divider').classList.remove('hidden');
+        }
+
         hideError();
         screen.classList.remove('hidden');
     }
@@ -61,7 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
         promptInput.value = '';
         geminiKeyInput.value = '';
         vercelTokenInput.value = '';
+        vercelTokenDirectInput.value = '';
         techStackSelect.value = 'react';
+        projectZipUploadInput.value = '';
+        if(zipUploadLabel) zipUploadLabel.textContent = 'Choose a .zip file...';
         handleRemoveImage();
         showScreen(setupStep);
     }
@@ -78,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- NEW: Handle image upload and conversion to base64 ---
     function handleImageUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
@@ -92,10 +113,9 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsDataURL(file);
     }
 
-    // --- NEW: Handle removing the uploaded image ---
     function handleRemoveImage() {
         state.imageData = null;
-        uiUploadInput.value = ''; // Reset the file input
+        uiUploadInput.value = ''; 
         imagePreview.src = '#';
         imagePreviewContainer.classList.add('hidden');
     }
@@ -112,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.techStack = techStackSelect.value; 
 
         if (!state.prompt || !state.geminiApiKey || !state.vercelToken || !state.techStack) {
-            showError('Please fill in all required fields.');
+            showError('Please fill in all required fields for AI generation.');
             return;
         }
 
@@ -123,7 +143,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('/generate-preview', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(state), // Send the whole state, including optional imageData
+                body: JSON.stringify(state), 
             });
 
             const data = await response.json();
@@ -174,6 +194,42 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/download-project';
     }
 
+    async function handleDirectDeploy() {
+        const vercelToken = vercelTokenDirectInput.value;
+        const projectZip = projectZipUploadInput.files[0];
+
+        if (!vercelToken || !projectZip) {
+            showError('Please provide both a .zip file and a Vercel token for direct deployment.');
+            return;
+        }
+
+        showScreen(loadingDiv);
+        loadingText.textContent = 'Uploading and deploying your project...';
+
+        const formData = new FormData();
+        formData.append('vercelToken', vercelToken);
+        formData.append('projectZip', projectZip);
+
+        try {
+            const response = await fetch('/upload-and-deploy', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                throw new Error(data.details || 'Failed to deploy the project.');
+            }
+            
+            setSafeUrl(liveUrlLink, data.url);
+            showScreen(resultStep);
+            
+        } catch (error) {
+            showError(`Direct deployment failed: ${error.message}`);
+            showScreen(setupStep);
+        }
+    }
+
     function showError(message) {
         errorDiv.textContent = message;
         errorDiv.classList.remove('hidden');
@@ -183,3 +239,4 @@ document.addEventListener('DOMContentLoaded', () => {
         errorDiv.classList.add('hidden');
     }
 });
+
