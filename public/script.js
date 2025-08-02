@@ -239,4 +239,3 @@ document.addEventListener('DOMContentLoaded', () => {
         errorDiv.classList.add('hidden');
     }
 });
-
